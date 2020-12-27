@@ -74,7 +74,7 @@ public class ScriptConverter {
         scriptBuilder.append("num y = 0;\n");
 
         if(!structure.getSpawns().isEmpty()) {
-            StringBuilder spawns = new StringBuilder("for(y; y > -50; y = y + 1) {");
+            StringBuilder spawns = new StringBuilder("for(y; y > -50; y = y - 1) {");
             for(DummyBlock spawn : structure.getSpawns()) {
                 spawns.append("\n    if(check(").append(spawn.getX() - structure.getStructureInfo().getCenterX())
                         .append(", y + ").append(spawn.getY()).append(", ")
