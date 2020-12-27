@@ -1,19 +1,18 @@
 package com.dfsek.converter;
 
 import com.dfsek.converter.dummy.DummyBlock;
-import com.dfsek.converter.dummy.DummySpawn;
 import com.dfsek.converter.dummy.DummyStructure;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ScriptConverter {
     public static void main(String[] args) throws IOException {
@@ -29,18 +28,13 @@ public class ScriptConverter {
         converter.put("[[Lcom.dfsek.terra.structure.StructureContainedBlock;", "[[Lcom.dfsek.converter.dummy.DummyBlock;");
         converter.put("[Lcom.dfsek.terra.structure.StructureContainedBlock;", "[Lcom.dfsek.converter.dummy.DummyBlock;");
 
-        File working = Paths.get(".").toFile();
+        Path working = Paths.get(".");
 
-        System.out.println("Working directory: " + working.getName());
+        System.out.println("Working directory: " + working.toFile().getAbsolutePath());
 
-        File[] files = working.listFiles(file -> file.getName().endsWith(".tstructure"));
-
-        if(files == null || files.length == 0) {
-            System.out.println("No tstructure files discovered");
-            return;
-        }
-
-        for(File file : files) {
+        Files.walk(working)
+                .filter(file -> file.toFile().getName().endsWith(".tstructure")).forEach(path -> {
+            File file = path.toFile();
             System.out.println("Converting " + file.getName());
 
             try(MovedObjectInputStream inputStream = new MovedObjectInputStream(new FileInputStream(file), converter)) {
@@ -51,21 +45,26 @@ public class ScriptConverter {
                 System.out.println("Converting structure to TerraScript...");
 
                 String script = buildStructure(structure);
-                String oldName = file.getName();
+
+                String oldName = working.toUri().relativize(file.toURI()).getPath(); // get relative path (to preserve structure)
+
                 String newName = oldName.substring(0, oldName.length() - 10) + "tesf";
-                File output = new File(working, newName);
-                if(!output.exists()) output.createNewFile();
+                File output = new File(working.toFile(), "out" + File.separator + newName);
+                if(!output.exists()) {
+                    output.getParentFile().mkdirs();
+                    output.createNewFile();
+                }
 
                 try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
                     writer.write(script);
                 }
-                System.out.println("Converted to TerraScript. Saving structure to " + output.getName());
-            } catch(ClassNotFoundException e) {
+                System.out.println("Converted to TerraScript. Saving structure to " + output.getAbsolutePath());
+            } catch(ClassNotFoundException | IOException e) {
                 System.err.println("Failed to convert structure!");
                 e.printStackTrace();
                 System.err.println("Please report this issue.");
             }
-        }
+        });
     }
 
     public static String buildStructure(DummyStructure structure) {
