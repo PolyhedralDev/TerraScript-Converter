@@ -81,6 +81,7 @@ public class ScriptConverter {
                         .append(spawn.getZ() - structure.getStructureInfo().getCenterZ()).append(") != ")
                         .append("\"").append(spawn.getRequirement()).append("\") {\n        continue;\n    }");
             }
+            spawns.append("\n    break;");
             spawns.append("\n}\n");
 
             spawns.append("if(y <= -50) {\n    fail;\n}\n");
