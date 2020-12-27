@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ScriptConverter {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
         Map<String, String> converter = new HashMap<>();
         converter.put("com.dfsek.terra.structure.Structure", "com.dfsek.converter.dummy.DummyStructure");
         converter.put("com.dfsek.terra.structure.StructureSpawnRequirement", "com.dfsek.converter.dummy.DummySpawn");
@@ -43,25 +43,28 @@ public class ScriptConverter {
         for(File file : files) {
             System.out.println("Converting " + file.getName());
 
-            MovedObjectInputStream inputStream = new MovedObjectInputStream(new FileInputStream(file), converter);
+            try(MovedObjectInputStream inputStream = new MovedObjectInputStream(new FileInputStream(file), converter)) {
+                Object o = inputStream.readObject();
+                DummyStructure structure = (DummyStructure) o;
 
-            Object o = inputStream.readObject();
+                System.out.println("\nLoaded structure: " + structure.getId());
+                System.out.println("Converting structure to TerraScript...");
 
-            DummyStructure structure = (DummyStructure) o;
+                String script = buildStructure(structure);
+                String oldName = file.getName();
+                String newName = oldName.substring(0, oldName.length() - 10) + "tesf";
+                File output = new File(working, newName);
+                if(!output.exists()) output.createNewFile();
 
-            System.out.println("\nLoaded structure: " + structure.getId());
-            System.out.println("Converting structure to TerraScript...");
-            String script = buildStructure(structure);
-            String oldName = file.getName();
-            String newName = oldName.substring(0, oldName.length()-10) + "tesf";
-            File output = new File(working, newName);
-            if(!output.exists()) output.createNewFile();
-
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
-                writer.write(script);
+                try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+                    writer.write(script);
+                }
+                System.out.println("Converted to TerraScript. Saving structure to " + output.getName());
+            } catch(ClassNotFoundException e) {
+                System.err.println("Failed to convert structure!");
+                e.printStackTrace();
+                System.err.println("Please report this issue.");
             }
-
-            System.out.println("Converted to TerraScript. Saving structure to " + output.getName());
         }
     }
 

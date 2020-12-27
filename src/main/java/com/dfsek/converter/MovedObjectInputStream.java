@@ -21,6 +21,7 @@ public class MovedObjectInputStream extends ObjectInputStream {
         ObjectStreamClass result = super.readClassDescriptor();
 
         try {
+            System.out.println("Resolving class " + result.getName());
             if(nameMap.containsKey(result.getName())) {
                 String newClassName = nameMap.get(result.getName());
                 // Test the class exists
@@ -35,6 +36,7 @@ public class MovedObjectInputStream extends ObjectInputStream {
                 suidField.setAccessible(true);
                 suidField.set(result, localClassDescriptor.getSerialVersionUID());
             }
+            System.out.println("Resolved to " + result.getName());
         } catch(Exception e) {
             throw new RuntimeException(new IOException("Exception when trying to replace namespace", e));
         }
@@ -45,9 +47,7 @@ public class MovedObjectInputStream extends ObjectInputStream {
 
     @Override
     protected Class<?> resolveClass(ObjectStreamClass desc) throws ClassNotFoundException {
-        System.out.println("Resolving class " + desc.getName());
         String name = nameMap.getOrDefault(desc.getName(), desc.getName());
-        System.out.println("Resolved to: " + name);
         return Class.forName(name);
     }
 }
