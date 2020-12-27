@@ -57,15 +57,11 @@ public class ScriptConverter {
             File output = new File(working, newName);
             if(!output.exists()) output.createNewFile();
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(output));
-
-            writer.write(script);
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+                writer.write(script);
+            }
 
             System.out.println("Converted to TerraScript. Saving structure to " + output.getName());
-
-
-
-
         }
     }
 
@@ -75,7 +71,7 @@ public class ScriptConverter {
         scriptBuilder.append("num y = 0;\n");
 
         if(!structure.getSpawns().isEmpty()) {
-            StringBuilder spawns = new StringBuilder("for(y = 0; y > -50; y = y + 1) {");
+            StringBuilder spawns = new StringBuilder("for(y; y > -50; y = y + 1) {");
             for(DummyBlock spawn : structure.getSpawns()) {
                 spawns.append("\n    if(check(").append(spawn.getX() - structure.getStructureInfo().getCenterX())
                         .append(", y + ").append(spawn.getY()).append(", ")
@@ -93,11 +89,12 @@ public class ScriptConverter {
             for(DummyBlock[] blocks1 : blocks) {
                 for(DummyBlock block : blocks1) {
                     if(!block.getBl().getData().equals("minecraft:structure_void")) {
+                        String data = block.getBl().getData();
                         scriptBuilder.append("block(").append(block.getX() - structure.getStructureInfo().getCenterX())
                                 .append(", y + ").append(block.getY()).append(", ")
                                 .append(block.getZ() - structure.getStructureInfo().getCenterZ())
-                                .append(", ").append(block.getBl().getData())
-                                .append(");\n");
+                                .append(", \"").append(data)
+                                .append("\");\n");
                     }
                 }
             }
