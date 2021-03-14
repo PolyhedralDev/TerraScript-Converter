@@ -26,7 +26,6 @@ public class SpongeConverter implements Converter {
     public String convert(InputStream in) {
         try {
             CompoundTag baseTag = (CompoundTag) new NBTDeserializer(false).fromStream(detectDecompression(in)).getTag();
-            System.out.println(baseTag);
             int wid = baseTag.getShort("Width");
             int len = baseTag.getShort("Length");
             int hei = baseTag.getShort("Height");

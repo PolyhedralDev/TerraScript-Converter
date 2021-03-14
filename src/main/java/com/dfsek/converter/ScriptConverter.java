@@ -29,7 +29,7 @@ public class ScriptConverter {
     private static void walk(String extension, Converter converter) throws IOException {
         Files.walk(working).filter(file -> file.toFile().getName().toLowerCase(Locale.ROOT).endsWith("." + extension)).forEach(path -> {
             File file = path.toFile();
-            System.out.println("Converting " + file.getName());
+            System.out.println("Converting " + file.getAbsolutePath());
             File out = new File(working.toFile(), "out" + File.separator + extension + File.separator + file.getName() + ".tesf");
             try {
                 if(!out.exists()) {
@@ -44,6 +44,7 @@ public class ScriptConverter {
             } catch(IOException e) {
                 throw new RuntimeException(e);
             }
+            System.out.println("Saved to " + out.getAbsolutePath());
         });
     }
 }

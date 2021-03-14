@@ -8,7 +8,7 @@ public class ScriptBuilder {
     private final List<String> checkFunctions = new ArrayList<>();
 
     public ScriptBuilder block(int x, int y, int z, String data) {
-        blockFunctions.add("block(" + x + ", " + y + ", " + z + ", \"" + data + "\");\n");
+        blockFunctions.add("block(" + x + ", y + " + y + ", " + z + ", \"" + data + "\");\n");
         return this;
     }
 
@@ -22,11 +22,10 @@ public class ScriptBuilder {
         builder.append("num y = 0;\n");
         if(!checkFunctions.isEmpty()) {
             builder.append("for(y; y > -50; y = y - 1) {\n");
-            builder.append("\ty = y + 1;\n");
             checkFunctions.forEach(builder::append);
             builder.append("\tbreak;\n");
             builder.append("}\n");
-            builder.append("if(y <= -50) continue;\n");
+            builder.append("if(y <= -50) fail;\n");
         }
 
         blockFunctions.forEach(builder::append);
