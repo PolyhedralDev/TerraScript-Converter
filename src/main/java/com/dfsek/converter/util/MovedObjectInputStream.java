@@ -1,4 +1,4 @@
-package com.dfsek.converter;
+package com.dfsek.converter.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,9 +21,18 @@ public class MovedObjectInputStream extends ObjectInputStream {
         ObjectStreamClass result = super.readClassDescriptor();
 
         try {
-            System.out.println("Resolving class " + result.getName());
-            if(nameMap.containsKey(result.getName())) {
-                String newClassName = nameMap.get(result.getName());
+
+            String completeName = result.getName();
+            String name = completeName;
+
+            if(name.startsWith("[")) {
+                name = name.replaceAll("\\[", ""); // Remove array brackets
+                name = name.substring(1); // remove L
+                name = name.substring(0, name.length()-1); // Remove ;
+            }
+
+            if(nameMap.containsKey(name)) {
+                String newClassName = completeName.replace(name, nameMap.get(name));
                 // Test the class exists
                 Class<?> localClass = Class.forName(newClassName);
 
@@ -36,7 +45,6 @@ public class MovedObjectInputStream extends ObjectInputStream {
                 suidField.setAccessible(true);
                 suidField.set(result, localClassDescriptor.getSerialVersionUID());
             }
-            System.out.println("Resolved to " + result.getName());
         } catch(Exception e) {
             throw new RuntimeException(new IOException("Exception when trying to replace namespace", e));
         }

@@ -1,4 +1,4 @@
-package com.dfsek.converter.dummy;
+package com.dfsek.converter.formats.tstructure.dummy;
 
 import java.io.Serializable;
 

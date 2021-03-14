@@ -1,22 +1,14 @@
-package com.dfsek.converter.dummy;
+package com.dfsek.converter.formats.tstructure.dummy;
 
 import java.io.Serializable;
 
 public class DummyInfo implements Serializable {
     private static final long serialVersionUID = -175639605885943678L;
-    private final int sizeX;
-    private final int sizeY;
-    private final int sizeZ;
-    private final int centerX;
-    private final int centerZ;
-
-    public DummyInfo(int sizeX, int sizeY, int sizeZ, int centerX, int centerZ) {
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-        this.sizeZ = sizeZ;
-        this.centerX = centerX;
-        this.centerZ = centerZ;
-    }
+    private int sizeX;
+    private int sizeY;
+    private int sizeZ;
+    private int centerX;
+    private int centerZ;
 
     public int getSizeX() {
         return sizeX;

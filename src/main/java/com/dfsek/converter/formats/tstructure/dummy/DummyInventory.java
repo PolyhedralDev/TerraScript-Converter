@@ -1,18 +1,11 @@
-package com.dfsek.converter.dummy;
+package com.dfsek.converter.formats.tstructure.dummy;
 
 import java.io.Serializable;
 
 public class DummyInventory implements Serializable {
     private static final long serialVersionUID = -175339605585943678L;
-    private final int uid;
-    private final int x, y, z;
-
-    public DummyInventory(int uid, int x, int y, int z) {
-        this.uid = uid;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+    private int uid;
+    private int x, y, z;
 
     public int getZ() {
         return z;
