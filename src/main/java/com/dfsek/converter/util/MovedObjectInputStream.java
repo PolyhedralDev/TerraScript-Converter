@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MovedObjectInputStream extends ObjectInputStream {
     private final Map<String, String> nameMap;
@@ -28,7 +27,7 @@ public class MovedObjectInputStream extends ObjectInputStream {
             if(name.startsWith("[")) {
                 name = name.replaceAll("\\[", ""); // Remove array brackets
                 name = name.substring(1); // remove L
-                name = name.substring(0, name.length()-1); // Remove ;
+                name = name.substring(0, name.length() - 1); // Remove ;
             }
 
             if(nameMap.containsKey(name)) {

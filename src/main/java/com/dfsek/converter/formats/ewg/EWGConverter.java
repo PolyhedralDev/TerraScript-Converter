@@ -24,9 +24,6 @@ public class EWGConverter implements Converter {
             Object o = inputStream.readObject();
             DummyStructure structure = (DummyStructure) o;
 
-            System.out.println("\nLoaded EWG structure: " + structure.getName());
-            System.out.println("Converting structure to TerraScript...");
-
             ScriptBuilder scriptBuilder = new ScriptBuilder();
 
             for(DummyBlock block : structure.getBlocks()) {

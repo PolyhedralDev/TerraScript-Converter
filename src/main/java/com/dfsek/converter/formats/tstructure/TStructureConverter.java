@@ -27,15 +27,11 @@ public class TStructureConverter implements Converter {
             Object o = inputStream.readObject();
             DummyStructure structure = (DummyStructure) o;
 
-            System.out.println("\nLoaded structure: " + structure.getId());
-            System.out.println("Converting structure to TerraScript...");
-
             ScriptBuilder scriptBuilder = new ScriptBuilder();
 
             for(DummyBlock spawn : structure.getSpawns()) {
                 scriptBuilder.check(spawn.getX(), spawn.getY(), spawn.getZ(), spawn.getRequirement().toString());
             }
-
 
             for(DummyBlock[][] blocks : structure.getStructure()) {
                 for(DummyBlock[] blocks1 : blocks) {
