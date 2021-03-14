@@ -2,6 +2,7 @@ package com.dfsek.converter;
 
 import com.dfsek.converter.formats.ewg.EWGConverter;
 import com.dfsek.converter.formats.rwg.RWGConverter;
+import com.dfsek.converter.formats.sponge.SpongeConverter;
 import com.dfsek.converter.formats.tstructure.TStructureConverter;
 import org.apache.commons.io.IOUtils;
 
@@ -22,6 +23,7 @@ public class ScriptConverter {
         walk("tstructure", new TStructureConverter());
         walk("ewg", new EWGConverter());
         walk("rwgfast", new RWGConverter());
+        walk("schem", new SpongeConverter());
     }
 
     private static void walk(String extension, Converter converter) throws IOException {
@@ -34,7 +36,11 @@ public class ScriptConverter {
                     out.getParentFile().mkdirs();
                     out.createNewFile();
                 }
-                IOUtils.write(converter.convert(new FileInputStream(file)), new FileOutputStream(out), Charset.defaultCharset());
+                String data = converter.convert(new FileInputStream(file));
+                String id = file.getName();
+                id = id.substring(0, id.lastIndexOf('.'));
+                data = "id \"" + id + "\";\n\n" + data;
+                IOUtils.write(data, new FileOutputStream(out), Charset.defaultCharset());
             } catch(IOException e) {
                 throw new RuntimeException(e);
             }

@@ -1,5 +1,6 @@
 import com.dfsek.converter.formats.ewg.EWGConverter;
 import com.dfsek.converter.formats.rwg.RWGConverter;
+import com.dfsek.converter.formats.sponge.SpongeConverter;
 import com.dfsek.converter.formats.tstructure.TStructureConverter;
 import org.junit.Test;
 
@@ -20,5 +21,11 @@ public class FormatTest {
     public void ewg() {
         EWGConverter converter = new EWGConverter();
         System.out.println(converter.convert(FormatTest.class.getResourceAsStream("/ewgStructure.EWG")));
+    }
+
+    @Test
+    public void sponge() {
+        SpongeConverter converter = new SpongeConverter();
+        System.out.println(converter.convert(FormatTest.class.getResourceAsStream("/worldEditSponge.schem")));
     }
 }

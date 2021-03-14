@@ -8,12 +8,12 @@ public class ScriptBuilder {
     private final List<String> checkFunctions = new ArrayList<>();
 
     public ScriptBuilder block(int x, int y, int z, String data) {
-        blockFunctions.add("block(" + x + ", " + y + ", " + z + ", " + data + ");\n");
+        blockFunctions.add("block(" + x + ", " + y + ", " + z + ", \"" + data + "\");\n");
         return this;
     }
 
     public ScriptBuilder check(int x, int y, int z, String type) {
-        checkFunctions.add("\tif(check(" + x + ", y + " + y + ", " + z + ") != " + type + ") continue;\n");
+        checkFunctions.add("\tif(check(" + x + ", y + " + y + ", " + z + ") != \"" + type + "\") continue;\n");
         return this;
     }
 
