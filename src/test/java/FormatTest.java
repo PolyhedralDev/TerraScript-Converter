@@ -1,10 +1,23 @@
 import com.dfsek.converter.formats.ewg.EWGConverter;
+import com.dfsek.converter.formats.iris.IrisConverter;
 import com.dfsek.converter.formats.rwg.RWGConverter;
 import com.dfsek.converter.formats.sponge.SpongeConverter;
 import com.dfsek.converter.formats.tstructure.TStructureConverter;
 import org.junit.Test;
 
 public class FormatTest {
+    @Test
+    public void iris() {
+        IrisConverter converter = new IrisConverter();
+        System.out.println(converter.convert(FormatTest.class.getResourceAsStream("/irisStructure.iob")));
+    }
+
+    @Test
+    public void irisLegacy() {
+        IrisConverter converter = new IrisConverter();
+        System.out.println(converter.convert(FormatTest.class.getResourceAsStream("/irisLegacyStructure.iob")));
+    }
+
     @Test
     public void rwg() {
         RWGConverter converter = new RWGConverter();
