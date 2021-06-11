@@ -1,6 +1,7 @@
 package com.dfsek.converter;
 
 import com.dfsek.converter.formats.ewg.EWGConverter;
+import com.dfsek.converter.formats.iris.IrisConverter;
 import com.dfsek.converter.formats.rwg.RWGConverter;
 import com.dfsek.converter.formats.sponge.SpongeConverter;
 import com.dfsek.converter.formats.tstructure.TStructureConverter;
@@ -24,6 +25,7 @@ public class ScriptConverter {
         walk("ewg", new EWGConverter());
         walk("rwgfast", new RWGConverter());
         walk("schem", new SpongeConverter());
+        walk("iob", new IrisConverter());
     }
 
     private static void walk(String extension, Converter converter) throws IOException {
